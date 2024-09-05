@@ -28,6 +28,7 @@ func Unpack(input string) (string, error) {
 				continue
 			}
 			sb.WriteString(char)
+			continue
 		}
 		// Обработка следующих элементов
 		char = splitedStringArr[i]
@@ -40,11 +41,13 @@ func Unpack(input string) (string, error) {
 					continue
 				}
 				sb.WriteString(splitedStringArr[i])
+				continue
 			}
 			sb.WriteString(splitedStringArr[i-1])
 			if i == len(splitedStringArr)-1 {
 				sb.WriteString(splitedStringArr[i])
 			}
+			continue
 		}
 		// Если это цифра пишем букву num раз
 		if isPreviousDigit {
