@@ -14,12 +14,12 @@ var (
 func Unpack(input string) (string, error) {
 	isPreviousDigit := false
 
-	splitedStringArr := splitString(input)
-	var sb strings.Builder
-
-	if len(splitedStringArr) == 0 {
+	if len(input) == 0 {
 		return "", nil
 	}
+
+	splitedStringArr := splitString(input)
+	var sb strings.Builder
 
 	_, err := strconv.Atoi(splitedStringArr[FirstElementOfArray]) // Преобразуем в целое число
 	if err == nil {                                               // Обработка ошибки преобразования
@@ -30,10 +30,7 @@ func Unpack(input string) (string, error) {
 	}
 
 	for i := 1; i < len(splitedStringArr); i++ {
-		char := splitedStringArr[i] // Получаем текущий символ
-
-		// Обработка следующих элементов
-		char = splitedStringArr[i]
+		char := splitedStringArr[i]
 		num, err2 := strconv.Atoi(char)
 		if err2 != nil { // Если это не цифра и предыдущий цифра - continue.
 			// Если это не цифра и предыдущий не цифра - пишем предыдущую букву
