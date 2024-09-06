@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 )
 
 var (
@@ -63,7 +64,7 @@ func Unpack(input string) (string, error) {
 
 func splitString(input string) []string {
 	// Создаём срез, который будет содержать руны
-	var result []string
+	result := make([]string, 0, utf8.RuneCountInString(input))
 
 	// Проходим по строке как по рунным литералам
 	for _, r := range input {
