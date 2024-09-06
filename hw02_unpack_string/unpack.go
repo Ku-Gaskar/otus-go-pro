@@ -17,19 +17,21 @@ func Unpack(input string) (string, error) {
 	splitedStringArr := splitString(input)
 	var sb strings.Builder
 
-	for i := 0; i < len(splitedStringArr); i++ {
-		char := splitedStringArr[i]   // Получаем текущий символ
-		if i == FirstElementOfArray { // Первый элемент массива
-			_, err := strconv.Atoi(char) // Преобразуем в целое число
-			if err == nil {
-				return "", ErrInvalidString // Обработка ошибки преобразования
-			}
-			if len(splitedStringArr) > 1 {
-				continue
-			}
-			sb.WriteString(char)
-			continue
-		}
+	if len(splitedStringArr) == 0 {
+		return "", nil
+	}
+
+	_, err := strconv.Atoi(splitedStringArr[FirstElementOfArray]) // Преобразуем в целое число
+	if err == nil {                                               // Обработка ошибки преобразования
+		return "", ErrInvalidString
+	}
+	if len(splitedStringArr) == 1 { // Если массив состояит только из 1 буквы - пишем
+		sb.WriteString(splitedStringArr[FirstElementOfArray])
+	}
+
+	for i := 1; i < len(splitedStringArr); i++ {
+		char := splitedStringArr[i] // Получаем текущий символ
+
 		// Обработка следующих элементов
 		char = splitedStringArr[i]
 		num, err2 := strconv.Atoi(char)
@@ -63,9 +65,13 @@ func Unpack(input string) (string, error) {
 }
 
 func splitString(input string) []string {
-	result := make([]string, len(input))
-	for i, r := range input {
-		result[i] = string(r)
+	// Создаём срез, который будет содержать руны
+	var result []string
+
+	// Проходим по строке как по рунным литералам
+	for _, r := range input {
+		// Добавляем каждую руну в результат как строку
+		result = append(result, string(r))
 	}
 	return result
 }

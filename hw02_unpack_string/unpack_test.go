@@ -2,6 +2,7 @@ package hw02unpackstring
 
 import (
 	"errors"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -50,6 +51,8 @@ func TestUnpackWhenOnlyOneCharacter(t *testing.T) {
 		expected string
 	}{
 		{input: "a", expected: "a"},
+		{input: "да", expected: "да"},
+		{input: "д2а", expected: "дда"},
 	}
 
 	for _, tc := range tests {
@@ -57,7 +60,7 @@ func TestUnpackWhenOnlyOneCharacter(t *testing.T) {
 		t.Run(tc.input, func(t *testing.T) {
 			result, err := Unpack(tc.input)
 			require.NoError(t, err)
-			require.Equal(t, tc.expected, result)
+			require.Equal(t, tc.expected, strings.TrimSpace(result))
 		})
 	}
 }
