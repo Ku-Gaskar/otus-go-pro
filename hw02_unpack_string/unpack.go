@@ -32,8 +32,8 @@ func Unpack(input string) (string, error) {
 
 	for i := 1; i < len(splitedStringArr); i++ {
 		char := splitedStringArr[i]
-		num, err2 := strconv.Atoi(char)
-		if err2 != nil { // Если это не цифра и предыдущий цифра - continue.
+		num, err := strconv.Atoi(char)
+		if err != nil { // Если это не цифра и предыдущий цифра - continue.
 			// Если это не цифра и предыдущий не цифра - пишем предыдущую букву
 			if isPreviousDigit {
 				if i != len(splitedStringArr)-1 {
