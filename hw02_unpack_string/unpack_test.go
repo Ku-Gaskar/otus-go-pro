@@ -43,3 +43,23 @@ func TestUnpackInvalidString(t *testing.T) {
 		})
 	}
 }
+
+func TestUnpackWhenOnlyOneCharacter(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{input: "a", expected: "a"},
+		{input: "да", expected: "да"},
+		{input: "д2а", expected: "дда"},
+	}
+
+	for _, tc := range tests {
+		tc := tc
+		t.Run(tc.input, func(t *testing.T) {
+			result, err := Unpack(tc.input)
+			require.NoError(t, err)
+			require.Equal(t, tc.expected, result)
+		})
+	}
+}
