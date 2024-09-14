@@ -14,7 +14,7 @@ func Top10(input string) []string {
 	wordCount := make(map[string]int)
 	words := strings.Fields(input)
 
-	//Заполнили мапу
+	// Заполнили мапу
 	for _, word := range words {
 		if word == "" {
 			continue
@@ -43,7 +43,7 @@ func Top10(input string) []string {
 			}
 		}
 
-		//Лексиграфическая сортировка слов, которые повторяется n раз
+		// Лексиграфическая сортировка слов, которые повторяется n раз
 		sort.Slice(listWords, func(i, j int) bool {
 			return listWords[i] < listWords[j]
 		})
