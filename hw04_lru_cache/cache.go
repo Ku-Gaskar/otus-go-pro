@@ -9,8 +9,6 @@ type Cache interface {
 }
 
 type lruCache struct {
-	Cache // Remove me after realization.
-
 	capacity int
 	queue    List
 	items    map[Key]*ListItem
@@ -22,4 +20,37 @@ func NewCache(capacity int) Cache {
 		queue:    NewList(),
 		items:    make(map[Key]*ListItem, capacity),
 	}
+}
+
+func (c *lruCache) Set(key Key, value interface{}) bool {
+	if item, ok := c.items[key]; ok { // Если элемент есть в словаре
+		item.Value = value        // Обновили значение
+		c.queue.MoveToFront(item) // Переместили в начало очереди
+		return true
+	}
+
+	if c.queue.Len() >= c.capacity { // Елемента нет в словаре и длинна очереди больше вместимости кэша
+		last := c.queue.Back()            // Получаем последний элемент очереди
+		c.queue.Remove(last)              // Удаляем последний элемент из очереди
+		delete(c.items, last.MapKeyCache) // Удаляем последний элемент из мапы
+	}
+
+	item := c.queue.PushFront(key) // Перемещаем в начало очереди
+	item.Value = value
+	item.MapKeyCache = key // Обновляем значение
+	c.items[key] = item    // Сохраняем в мапу
+	return false
+}
+
+func (c *lruCache) Get(key Key) (interface{}, bool) {
+	if item, ok := c.items[key]; ok { // Элемент присутсвует в словаре
+		c.queue.MoveToFront(item) // Перемещаем элемент в начало очереди
+		return item.Value, true
+	}
+	return nil, false
+}
+
+func (c *lruCache) Clear() {
+	c.queue = NewList()
+	c.items = make(map[Key]*ListItem, c.capacity)
 }
