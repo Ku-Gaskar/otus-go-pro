@@ -69,11 +69,9 @@ func (l *list) Remove(item *ListItem) {
 			l.head.Next.Prev = nil
 		}
 		l.head = l.head.Next
-		break
 	case item == l.tail:
 		l.tail.Prev.Next = nil
 		l.tail = l.tail.Prev
-		break
 	default:
 		item.Prev.Next = item.Next
 		item.Next.Prev = item.Prev
