@@ -11,10 +11,9 @@ type List interface {
 }
 
 type ListItem struct {
-	Value       interface{}
-	Next        *ListItem
-	Prev        *ListItem
-	MapKeyCache Key
+	Value interface{}
+	Next  *ListItem
+	Prev  *ListItem
 }
 
 type list struct {
@@ -70,11 +69,11 @@ func (l *list) Remove(item *ListItem) {
 			l.head.Next.Prev = nil
 		}
 		l.head = l.head.Next
+		break
 	case item == l.tail:
-		if l.tail.Prev != nil {
-			l.tail.Prev.Next = nil
-		}
+		l.tail.Prev.Next = nil
 		l.tail = l.tail.Prev
+		break
 	default:
 		item.Prev.Next = item.Next
 		item.Next.Prev = item.Prev
@@ -83,7 +82,7 @@ func (l *list) Remove(item *ListItem) {
 }
 
 func (l *list) MoveToFront(item *ListItem) {
-	if l.len < 2 {
+	if l.head == item {
 		return
 	}
 	l.Remove(item)

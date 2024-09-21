@@ -2,6 +2,8 @@ package hw04lrucache
 
 type Key string
 
+var cache = make(map[*ListItem]Key)
+
 type Cache interface {
 	Set(key Key, value interface{}) bool
 	Get(key Key) (interface{}, bool)
@@ -30,15 +32,16 @@ func (c *lruCache) Set(key Key, value interface{}) bool {
 	}
 
 	if c.queue.Len() >= c.capacity { // Елемента нет в словаре и длинна очереди больше вместимости кэша
-		last := c.queue.Back()            // Получаем последний элемент очереди
-		c.queue.Remove(last)              // Удаляем последний элемент из очереди
-		delete(c.items, last.MapKeyCache) // Удаляем последний элемент из мапы
+		last := c.queue.Back()       // Получаем последний элемент очереди
+		c.queue.Remove(last)         // Удаляем последний элемент из очереди
+		delete(c.items, cache[last]) // Удаляем последний элемент из мапы
+		delete(cache, last)
 	}
 
 	item := c.queue.PushFront(key) // Перемещаем в начало очереди
 	item.Value = value
-	item.MapKeyCache = key // Обновляем значение
-	c.items[key] = item    // Сохраняем в мапу
+	cache[item] = key   // Обновляем значение
+	c.items[key] = item // Сохраняем в мапу
 	return false
 }
 
@@ -53,4 +56,5 @@ func (c *lruCache) Get(key Key) (interface{}, bool) {
 func (c *lruCache) Clear() {
 	c.queue = NewList()
 	c.items = make(map[Key]*ListItem, c.capacity)
+	cache = make(map[*ListItem]Key)
 }
