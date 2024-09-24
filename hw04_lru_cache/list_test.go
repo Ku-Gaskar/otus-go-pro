@@ -103,3 +103,10 @@ func TestList_2(t *testing.T) {
 			item1, item4, l.Len(), l.Front(), l.Back())
 	}
 }
+func TestList_3_Remove_Only_one(t *testing.T) {
+	l := NewList()
+	l.PushFront("text_1")
+	require.Equal(t, 1, l.Len())
+	l.Remove(l.Front())
+	require.Equal(t, 0, l.Len())
+}
