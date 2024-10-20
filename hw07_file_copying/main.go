@@ -16,7 +16,8 @@ func init() {
 	flag.Int64Var(&offset, "offset", 0, "offset in input file")
 }
 
-func main() {
-	flag.Parse()
-	// Place your code here.
-}
+//
+//func main() {
+//	flag.Parse()
+//	// Place your code here.
+//}

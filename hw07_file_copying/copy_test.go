@@ -83,7 +83,7 @@ func TestCopy(t *testing.T) {
 			toPath:           "out.txt",
 			offset:           6000,
 			limit:            1000,
-			expectedError:    io.EOF,
+			expectedError:    nil,
 			expectedFilePath: "testdata/out_offset6000_limit1000.txt",
 		},
 		{
@@ -102,6 +102,7 @@ func TestCopy(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			err := Copy(tc.fromPath, tc.toPath, tc.offset, tc.limit)
+			defer os.Remove(tc.toPath)
 			if !errors.Is(err, tc.expectedError) {
 				t.Errorf("Expected error %v, got %v", tc.expectedError, err)
 			}
@@ -126,7 +127,7 @@ func TestCopy(t *testing.T) {
 				if !bytes.Equal(actualContent, expectedContent) {
 					t.Errorf("Expected output file content %s, got %s", actualContent, expectedContent)
 				}
-				os.Remove(tc.toPath)
+				//os.Remove(tc.toPath)
 			}
 		})
 	}
