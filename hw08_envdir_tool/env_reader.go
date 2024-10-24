@@ -39,12 +39,12 @@ func ReadDir(dir string) (Environment, error) {
 		if err != nil {
 			return nil, err
 		}
+		envVal.NeedRemove = len(fData) == 0
 		scanner := bufio.NewScanner(strings.NewReader(string(fData)))
 		if scanner.Scan() {
 			envVal.Value = scanner.Text()
 			envVal.Value = strings.TrimRight(envVal.Value, " \t")
 			envVal.Value = strings.ReplaceAll(envVal.Value, "\x00", "\n")
-			envVal.NeedRemove = envVal.Value == ""
 		}
 		env[file.Name()] = envVal
 	}
