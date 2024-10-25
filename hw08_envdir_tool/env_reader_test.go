@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/stretchr/testify/require"
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestReadDir(t *testing.T) {
@@ -40,5 +41,4 @@ func TestReadDir(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, Environment{}, env)
 	})
-
 }
