@@ -13,11 +13,6 @@ const (
 
 // RunCmd runs a command + arguments (cmd) with environment variables from env.
 func RunCmd(cmd []string, env Environment) (returnCode int) {
-	//if len(cmd) == 0 {
-	//	fmt.Fprintf(os.Stderr, "usage: %s /path/to/env/dir command [args...]\n", cmd[0])
-	//	return failure
-	//}
-
 	com := exec.Command(cmd[0], cmd[1:]...)
 
 	// Установить переменные окружения
@@ -32,7 +27,6 @@ func RunCmd(cmd []string, env Environment) (returnCode int) {
 				fmt.Fprintf(os.Stderr, "error setting environment: %v\n", err)
 			}
 		}
-		//com.Env = append(com.Env, fmt.Sprintf("%s=%s", k, v))
 	}
 
 	com.Stderr = os.Stderr
@@ -47,6 +41,6 @@ func RunCmd(cmd []string, env Environment) (returnCode int) {
 			fmt.Fprintf(os.Stderr, "error running command: %v\n", err)
 			return failure
 		}
-	} //com.Env = os.Environ()
+	}
 	return success
 }
