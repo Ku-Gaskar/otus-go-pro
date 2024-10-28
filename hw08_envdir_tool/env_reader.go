@@ -35,12 +35,24 @@ func ReadDir(dir string) (Environment, error) {
 		if strings.Contains(file.Name(), "=") {
 			return nil, errors.New("error: file name contains '='")
 		}
-		fData, err := os.ReadFile(filepath.Join(dir, file.Name()))
+
+		// Открываем файл
+		file, err := os.Open(filepath.Join(dir, file.Name()))
 		if err != nil {
 			return nil, err
 		}
-		envVal.NeedRemove = len(fData) == 0
-		scanner := bufio.NewScanner(strings.NewReader(string(fData)))
+		defer file.Close()
+
+		info, err := file.Stat()
+		if err != nil {
+			return nil, err
+		}
+
+		envVal.NeedRemove = info.Size() == int64(0)
+
+		// Создаем новый Scanner
+		scanner := bufio.NewScanner(file)
+
 		if scanner.Scan() {
 			envVal.Value = scanner.Text()
 			envVal.Value = strings.TrimRight(envVal.Value, " \t")
