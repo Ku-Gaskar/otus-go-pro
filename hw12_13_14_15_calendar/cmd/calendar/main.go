@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -12,15 +13,17 @@ import (
 	"github.com/fixme_my_friend/hw12_13_14_15_calendar/internal/logger"
 	internalhttp "github.com/fixme_my_friend/hw12_13_14_15_calendar/internal/server/http"
 	memorystorage "github.com/fixme_my_friend/hw12_13_14_15_calendar/internal/storage/memory"
+	sqlstorage "github.com/fixme_my_friend/hw12_13_14_15_calendar/internal/storage/sql"
 )
 
 var configFile string
 
 func init() {
-	flag.StringVar(&configFile, "config", "/etc/calendar/config.toml", "Path to configuration file")
+	flag.StringVar(&configFile, "config", "/etc/calendar/config.yaml", "Path to configuration file")
 }
 
 func main() {
+
 	flag.Parse()
 
 	if flag.Arg(0) == "version" {
@@ -28,17 +31,29 @@ func main() {
 		return
 	}
 
-	config := NewConfig()
-	logg := logger.New(config.Logger.Level)
-
-	storage := memorystorage.New()
-	calendar := app.New(logg, storage)
-
-	server := internalhttp.NewServer(logg, calendar)
+	config := NewConfig(configFile)
+	logg := logger.New(config.Logger.Enabled, config.Logger.Level, "")
 
 	ctx, cancel := signal.NotifyContext(context.Background(),
 		syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
 	defer cancel()
+
+	//var storage any
+	if config.Database.InMemory {
+		storage = memorystorage.New()
+		//calendar := app.New(logg, storage)
+
+	} else {
+		storage := sqlstorage.New()
+		dsn := "user=username password=password dbname=dbname sslmode=disable"
+		if err := storage.Connect(ctx, "postgress", dsn); err != nil {
+			fmt.Printf("Error connecting to the database: %v\n", err)
+			return
+		}
+	}
+	calendar := app.New(logg, storage)
+
+	server := internalhttp.NewServer(logg, calendar)
 
 	go func() {
 		<-ctx.Done()
