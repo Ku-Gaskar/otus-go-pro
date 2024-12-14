@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq" // Импорт PostgreSQL-драйвера
 )
 
 type Storage struct {

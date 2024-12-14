@@ -6,6 +6,13 @@ import (
 	"strings"
 )
 
+type Log interface {
+	Error(msg string, a ...any)
+	Warn(msg string, a ...any)
+	Info(msg string, a ...any)
+	Debug(msg string, a ...any)
+}
+
 type Logger struct {
 	logger     *log.Logger
 	logLevel   int
@@ -48,33 +55,33 @@ func parseLogLevel(level string) int {
 }
 
 // Error логирует сообщение уровня ERROR.
-func (l *Logger) Error(v ...interface{}) {
+func (l *Logger) Error(msg string, a ...any) {
 	if l.logEnabled && l.logLevel >= LevelError {
 		l.logger.SetPrefix("[ERROR] ")
-		l.logger.Println(v...)
+		l.logger.Println(msg)
 	}
 }
 
 // Warn логирует сообщение уровня WARN.
-func (l *Logger) Warn(v ...interface{}) {
+func (l *Logger) Warn(msg string, a ...any) {
 	if l.logEnabled && l.logLevel >= LevelWarn {
 		l.logger.SetPrefix("[WARN] ")
-		l.logger.Println(v...)
+		l.logger.Println(msg)
 	}
 }
 
 // Info логирует сообщение уровня INFO.
-func (l *Logger) Info(v ...interface{}) {
+func (l *Logger) Info(msg string, a ...any) {
 	if l.logEnabled && l.logLevel >= LevelInfo {
 		l.logger.SetPrefix("[INFO] ")
-		l.logger.Println(v...)
+		l.logger.Println(msg)
 	}
 }
 
 // Debug логирует сообщение уровня DEBUG.
-func (l *Logger) Debug(v ...interface{}) {
+func (l *Logger) Debug(msg string, a ...any) {
 	if l.logEnabled && l.logLevel >= LevelDebug {
 		l.logger.SetPrefix("[DEBUG] ")
-		l.logger.Println(v...)
+		l.logger.Println(msg)
 	}
 }

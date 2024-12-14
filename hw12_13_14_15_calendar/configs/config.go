@@ -1,4 +1,4 @@
-package main
+package configs
 
 import (
 	"gopkg.in/yaml.v3"
@@ -15,20 +15,32 @@ import (
 type Config struct {
 	Logger   LoggerConf   `yaml:"logger"`
 	Database DatabaseConf `yaml:"database"`
+	Server   ServerConf   `yaml:"server"`
 }
 
 type DatabaseConf struct {
-	InMemory bool   `yaml:"in_memory"`
-	Host     string `yaml:"host"`
-	Port     string `yaml:"port"`
-	Name     string `yaml:"name"`
-	Login    string `yaml:"login"`
-	Password string `yaml:"password"`
+	InMemory       bool   `yaml:"in_memory"`
+	DriverName     string `yaml:"driver_name"`
+	Host           string `yaml:"host"`
+	Port           string `yaml:"port"`
+	Name           string `yaml:"name"`
+	User           string `yaml:"user"`
+	Password       string `yaml:"password"`
+	FileMigrations string `yaml:"file_migrations"`
 }
 
 type LoggerConf struct {
 	Enabled bool   `yaml:"enabled"`
 	Level   string `yaml:"level"`
+}
+
+type ServerConf struct {
+	Http ServerHttpConf `yaml:"http"`
+}
+
+type ServerHttpConf struct {
+	Host string `yaml:"host"`
+	Port string `yaml:"port"`
 }
 
 func NewConfig(pathConfigFile string) Config {
