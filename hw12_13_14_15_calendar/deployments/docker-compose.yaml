@@ -1,1 +1,30 @@
-version: "3"
+version: '3.8'
+services:
+
+  postgres_new:
+    image: postgres
+    container_name: postgres_new
+    networks:
+      - app-network
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgress
+      POSTGRES_DB: calendar_db
+    ports:
+      - "5433:5432"
+  app:
+    image: calendar:develop
+    depends_on:
+      - postgres_new
+    networks:
+      - app-network
+    environment:
+      DATABASE_HOST: postgres_new
+      DATABASE_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgress
+      DATABASE_NAME: calendar_db
+    ports:
+      - "8000:8000"
+networks:
+  app-network:

@@ -1,0 +1,21 @@
+# База данных если in_memory: false
+database:
+  in_memory: false
+  driver_name: postgres
+  host: postgres_new
+  port: 5432
+  name: calendar_db
+  user: postgres
+  password: postgress
+  file_migrations: /app/migrations/migration_calendar_db.sql
+
+# Логгер
+logger:
+  enabled: true
+  level: info
+
+#Сервер http
+server:
+  http:
+    host: 0.0.0.0
+    port: 8000
